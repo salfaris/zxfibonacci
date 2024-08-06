@@ -10,11 +10,15 @@ Count = int
 Result = dict[BinarySequence, Count]
 
 
+def zxfibo(n: int):
+    return ZXFibo(n_qubits=n).number(tau=0)
+
+
 class ZXFibo:
-    def __init__(self, n: int):
-        if not n > 1:
-            raise ValueError("n has to be > 1.")
-        self.n_qubits = n
+    def __init__(self, n_qubits: int):
+        if not n_qubits > 1:
+            raise ValueError("n_qubits has to be > 1.")
+        self.n_qubits = n_qubits
         return
 
     def pyzx_circuit(self):
