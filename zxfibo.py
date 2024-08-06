@@ -12,6 +12,8 @@ Result = dict[BinarySequence, Count]
 
 class ZXFibo:
     def __init__(self, n: int):
+        if not n > 1:
+            raise ValueError("n has to be > 1.")
         self.n_qubits = n
         return
 
@@ -28,15 +30,32 @@ class ZXFibo:
     def ibm_circuit(self):
         return _pyzx_to_qiskit(self.pyzx_circuit())
 
-    def run(
-        circ: qiskit.QuantumCircuit,
-        backend: qiskit.providers.Backend,
-        shots: int = 1000,
-    ) -> Result:
-        job = qiskit.execute(circ, backend, shots=shots)
-        result = job.result()
-        counts = result.get_counts()
-        return counts
+    def eval(self):
+        backend = qiskit.Aer.get_backend("qasm_simulator")
+        shots = 1000
+        config = {"backend": backend, "shots": shots}
+        count = _run_circuit(self.ibm_circuit(), backend=backend, shots=shots)
+        return count, config
+
+    def number(self, tau: float = 0.05):
+        count, config = self.eval()
+        proba = {k: v / config["shots"] for k, v in count.items()}
+        fibo_n = 0
+        for v in proba.values():
+            if v > tau:
+                fibo_n += 1
+        return fibo_n
+
+
+def _run_circuit(
+    circ: qiskit.QuantumCircuit,
+    backend: qiskit.providers.Backend,
+    shots: int = 1000,
+) -> Result:
+    job = qiskit.execute(circ, backend, shots=shots)
+    result = job.result()
+    counts = result.get_counts()
+    return counts
 
 
 def _add_cx_alpha_gate(
