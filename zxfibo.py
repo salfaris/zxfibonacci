@@ -7,6 +7,7 @@ import qiskit
 
 BinarySequence = str
 Count = int
+Result = dict[BinarySequence, Count]
 
 
 class ZXFibo:
@@ -26,6 +27,16 @@ class ZXFibo:
 
     def ibm_circuit(self):
         return _pyzx_to_qiskit(self.pyzx_circuit())
+
+    def run(
+        circ: qiskit.QuantumCircuit,
+        backend: qiskit.providers.Backend,
+        shots: int = 1000,
+    ) -> Result:
+        job = qiskit.execute(circ, backend, shots=shots)
+        result = job.result()
+        counts = result.get_counts()
+        return counts
 
 
 def _add_cx_alpha_gate(
