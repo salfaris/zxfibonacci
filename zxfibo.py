@@ -22,6 +22,7 @@ class ZXFibo:
         return
 
     def pyzx_circuit(self):
+        """Builds a ZXFibo PyZX circuit for n qubits."""
         circ = zx.Circuit(self.n_qubits)
         # For each qubit, add an X(\pi/2) gate.
         for qubit in range(self.n_qubits):
@@ -32,9 +33,11 @@ class ZXFibo:
         return circ
 
     def ibm_circuit(self):
+        """Builds a ZXFibo IBM circuit for n qubits."""
         return _pyzx_to_qiskit(self.pyzx_circuit())
 
     def eval(self):
+        """Runs the ZXFibo circuit on an IBM ideal simulator for 1000 shots."""
         backend = qiskit.Aer.get_backend("qasm_simulator")
         shots = 1000
         config = {"backend": backend, "shots": shots}
@@ -42,6 +45,7 @@ class ZXFibo:
         return count, config
 
     def number(self, tau: float = 0.05):
+        """Computes the n-th Fibonacci number where n = `n_qubits`."""
         count, config = self.eval()
         proba = {k: v / config["shots"] for k, v in count.items()}
         fibo_n = 0
@@ -56,6 +60,7 @@ def _run_circuit(
     backend: qiskit.providers.Backend,
     shots: int = 1000,
 ) -> Result:
+    """Runs a quantum circuit on an IBM backend."""
     job = qiskit.execute(circ, backend, shots=shots)
     result = job.result()
     counts = result.get_counts()
@@ -65,7 +70,7 @@ def _run_circuit(
 def _add_cx_alpha_gate(
     circuit: zx.Circuit, alpha: Fraction | int, control: int, target: int
 ) -> zx.Circuit:
-    """Adds a CX(alpha) gate"""
+    """Adds a CX(alpha) gate to a ZX circuit."""
     circuit.add_gate("HAD", target)
     circuit.add_gate("ZPhase", control, phase=alpha * Fraction(1, 2))
     circuit.add_gate("ZPhase", target, phase=alpha * Fraction(1, 2))
