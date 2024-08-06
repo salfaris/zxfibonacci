@@ -2,7 +2,8 @@
 
 **ZXFibo:** A simple Fibonacci quantum algorithm based on Clifford+T hardware.
 
-![zxfibo](./docs/zxfibo.png)
+
+<img src="./docs/zxfibo.png" width="60%">
 
 For correctness proof of **ZXFibo** using ZX-calculus, read my August 2024 blog post here: [A benchmark for testing quantum computers with Clifford+T hardware](https://salfaris.github.io/posts/2024-08-04-quantum-fibonacci/).
 
