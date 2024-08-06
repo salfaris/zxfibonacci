@@ -1,6 +1,6 @@
 # Fibonacci in the ZX calculus
 
-**ZXFibo:** A simple Fibonacci quantum algorithm based on Clifford+T hardware.
+**ZXFibo:** A simple quantum algorithm to compute Fibonacci numbers based on Clifford+T hardware.
 
 
 <img src="./docs/zxfibo.png" width="60%">
