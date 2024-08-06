@@ -1,4 +1,5 @@
 import math
+from typing import Any
 
 from fractions import Fraction
 import pyzx as zx
@@ -36,10 +37,12 @@ class ZXFibo:
         """Builds a ZXFibo IBM circuit for n qubits."""
         return _pyzx_to_qiskit(self.pyzx_circuit())
 
-    def eval(self):
-        """Runs the ZXFibo circuit on an IBM ideal simulator for 1000 shots."""
-        backend = qiskit.Aer.get_backend("qasm_simulator")
-        shots = 1000
+    def eval(
+        self,
+        backend=qiskit.Aer.get_backend("qasm_simulator"),
+        shots: int = 1000,
+    ) -> tuple[Result, dict[str, Any]]:
+        """Runs the ZXFibo circuit on an IBM ideal simulator."""
         config = {"backend": backend, "shots": shots}
         count = _run_circuit(self.ibm_circuit(), backend=backend, shots=shots)
         return count, config
