@@ -1,9 +1,8 @@
+from fractions import Fraction
 import math
 from typing import Any
 
-from fractions import Fraction
 import pyzx as zx
-
 import qiskit
 
 BinarySequence = str
